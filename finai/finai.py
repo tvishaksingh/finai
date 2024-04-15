@@ -18,6 +18,7 @@ from langchain_community.document_loaders import (
     UnstructuredPowerPointLoader,
     Docx2txtLoader,
     UnstructuredExcelLoader,
+    BSHTMLLoader,
 )
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_community.embeddings import HuggingFaceInstructEmbeddings
@@ -31,6 +32,7 @@ FILE_LOADERS = {
     "pptx": UnstructuredPowerPointLoader,
     "txt": TextLoader,
     "xlsx": UnstructuredExcelLoader,
+    "html": BSHTMLLoader,
 }
 
 ACCEPTED_FILE_TYPES = list(FILE_LOADERS)
