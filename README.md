@@ -1,5 +1,6 @@
 # finai
-Chat with various document types - XLSX, PPTX, DOCX, PDF, CSV, TXT - using any LLM models using ollama
+Chat with various document types - XLSX, PPTX, DOCX, PDF, CSV, TXT - using any LLM models using ollama.
+For Financial documents like Earning call, 10-k automatic prompts to get more insightful information.
 
 ## Getting started
 
