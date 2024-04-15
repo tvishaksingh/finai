@@ -1,5 +1,5 @@
 # finai
-Chat with various document types - XLSX, PPTX, DOCX, PDF, CSV, TXT - using chatGPT 4 Turbo and Langchain
+Chat with various document types - XLSX, PPTX, DOCX, PDF, CSV, TXT - using any LLM models using ollama
 
 ## Getting started
 
