@@ -341,7 +341,7 @@ def upload_and_handle_file():
 
     :return: None
     """
-    st.title("Document Buddy - Chat with Document Data")
+    st.title("Ask a question about the document data: Enter earning call [company name] or 10k [company name] for automatic prompts:")
     uploaded_file = st.file_uploader(
         label=(
             f"Choose a {', '.join(ACCEPTED_FILE_TYPES[:-1]).upper()}, or "
