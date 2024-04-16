@@ -191,15 +191,6 @@ class ChatWithFile:
         self.vectordb = Chroma.from_documents(docs, embedding=self.embedding_model)
         self.vectordb.persist()
 
-    # This method appears to be unused. Commenting for now
-    # def retrieve_documents(self, query):
-    #     # pylint: disable=line-too-long
-    #     # Example: Convert query to embeddings and perform a vector search in ChromaDB
-    #     query_embedding = OpenAIEmbeddings()  # Assuming SemanticChunker can embed text
-    #     search_results = self.vectordb.search(query_embedding, top_k=5)  # Adjust based on your setup
-    #     document_ids = [result["id"] for result in search_results]  # Extract document IDs from results
-    #     return document_ids
-
     def extract_json_from_response(self, response_text):
         """
         If a response is received that should have JSON embedded in the
