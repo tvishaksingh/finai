@@ -26,16 +26,4 @@ Pick Your Model
 Wait and review the Tree 
 Ask any outstanding questions 
 
-### Download company Data
-from sec_edgar_downloader import Downloader
-dl = Downloader("MyCompanyName", "my.email@domain.com")
-dl.get("8-K", "AAPL")
-
-### Earning Call download from youtube
-from youtube_transcript_api import YouTubeTranscriptApi
-# Replace 'VIDEO_ID' with the ID of the video you want to transcribe
-transcript = YouTubeTranscriptApi.get_transcript('VIDEO_ID')
-print(transcript)
-
-
 ## Thank you
