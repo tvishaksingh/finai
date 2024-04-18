@@ -7,6 +7,7 @@ import json
 import pathlib
 import requests
 import streamlit as st
+import pandas as pd
 from langchain_community.llms import Ollama
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
@@ -19,9 +20,11 @@ from langchain_community.document_loaders import (
     Docx2txtLoader,
     UnstructuredExcelLoader,
     BSHTMLLoader,
+    JSONLoader,
 )
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_community.embeddings import HuggingFaceInstructEmbeddings
+from youtube_transcript_api import YouTubeTranscriptApi
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +36,7 @@ FILE_LOADERS = {
     "txt": TextLoader,
     "xlsx": UnstructuredExcelLoader,
     "html": BSHTMLLoader,
+    "json": JSONLoader,
 }
 
 ACCEPTED_FILE_TYPES = list(FILE_LOADERS)
@@ -353,6 +357,7 @@ def upload_and_handle_file():
         # Determine the file type and set accordingly
         file_type = pathlib.Path(uploaded_file.name).suffix
         file_type = file_type.replace(".", "")
+        st.write(file_type)
 
         if file_type:  # Will be an empty string if no extension
             csv_pdf_txt_path = os.path.join("temp", uploaded_file.name)
@@ -361,6 +366,7 @@ def upload_and_handle_file():
             with open(csv_pdf_txt_path, "wb") as f:
                 f.write(uploaded_file.getvalue())
             st.session_state["file_path"] = csv_pdf_txt_path
+            st.write(csv_pdf_txt_path)
             st.session_state["file_type"] = file_type  # Store the file type in session state
             st.success(f"{file_type.upper()} file uploaded successfully.")
             # Fetch and display the models in a select box
@@ -438,12 +444,62 @@ def chat_interface():
             #    prefix = "*You:* " if isinstance(message, HumanMessage) else "*AI:* "
             #    st.markdown(f"{prefix}{message.content}")
 
+def get_youtube_transcript():
+    # Create a text input for the YouTube video URL
+    url = st.text_input('Enter the YouTube video URL')
+
+    if url:
+        # Extract the video ID from the URL
+        video_id = url.split('watch?v=')[-1]
+
+        # Get the transcript
+        try:
+            transcript = YouTubeTranscriptApi.get_transcript(video_id)
+            st.write(transcript)
+            if not os.path.exists("temp"):
+                os.makedirs("temp")
+            st.write("temp created")
+            try:
+                transcript = YouTubeTranscriptApi.get_transcript(video_id)
+                # Extract only the text from the transcript
+                transcript_text = [item['text'] for item in transcript]
+                # Save the transcript text to a file
+                with open('temp/transcript.txt', 'w') as f:
+                    for line in transcript_text:
+                        f.write(line + '\n')
+        
+                st.write("Transcript text has been saved to 'temp/transcript.txt'")
+            except Exception as e:
+                st.write(f"An error occurred: {e}")
+
+            st.write("transcript created")
+                # Path to the output text file
+            text_file_path = 'temp/transcript.txt'
+            st.session_state["file_path"] = text_file_path
+            st.write("TV: set the file_path")
+            st.session_state["file_type"] = "txt"
+            st.success("file uploaded successfully.")
+            # Fetch and display the models in a select box
+            models = get_ollama_models("http://ollama:11434/")  # Make sure to use the correct base URL
+            if models:
+                selected_model = st.selectbox("Select Model", models)
+                st.session_state['selected_model'] = selected_model            
+                st.button(
+                    "Proceed to Chat",
+                    on_click=lambda: st.session_state.update({"page": 2})
+                )
+        
+            #st.write("Transcript has been saved to 'transcript.json'")
+        except Exception as e:
+            st.write(f"An error occurred: {e}")
+
 
 if __name__ == "__main__":
     if "page" not in st.session_state:
         st.session_state["page"] = 1
 
     if st.session_state["page"] == 1:
+        get_youtube_transcript()
         upload_and_handle_file()
     elif st.session_state["page"] == 2:
         chat_interface()
