@@ -15,7 +15,7 @@ http://localhost:3002
 ## Download Your Models
 Using Ollama WebUI download your model(s)
 
-## Start Packet Raptor
+## Start Financial AI
 http://localhost:8510
 
 ### Usage
